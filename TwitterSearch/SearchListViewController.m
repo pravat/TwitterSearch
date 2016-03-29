@@ -21,8 +21,15 @@ typedef enum : NSUInteger{
     TwitterStatusSignedIn = (1 << 1)
 }TwitterStatus;
 
+typedef enum : NSUInteger{
+    TwitterWorkStatusRequesting = (1 << 0),
+    TwitterWorkStatusDone = (1 << 1),
+    TwitterWorkStatusDoneWithError = (1 << 2)
+}TwitterWorkStatus;
+
 @interface SearchListViewController (){
     TwitterStatus twitterStatus;
+    TwitterWorkStatus twitterWorkStatus;
 }
 
 
@@ -232,6 +239,7 @@ typedef enum : NSUInteger{
     if ([self hasMoreTweets]) {
         count++;
     }
+    
     return count;
 }
 
@@ -347,6 +355,7 @@ typedef enum : NSUInteger{
         return;
     }
     assert(self.twitter);
+    twitterWorkStatus = TwitterWorkStatusRequesting;
     [self showStatusWithText:@"Searching tweets" withAnimation:NO isShake:NO autoHide: NO];
     __weak typeof(self) weakSelf = self;
     NSString *searchQuery = [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -360,16 +369,26 @@ typedef enum : NSUInteger{
         }];
         weakSelf.responseSearchMetaData = searchMetadata;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf hideStatus];
+                
+                [weakSelf.tableView reloadData];
+                if (weakSelf.responseStatuses.count == 0 && ((twitterWorkStatus & TwitterWorkStatusDone)|| (twitterWorkStatus &TwitterWorkStatusDoneWithError))) {
+                    [self showStatusWithText:@"No Tweets found" withAnimation:YES isShake:YES autoHide:NO];
+                }
+                else{
+                    [self showStatusWithText:@"Done" withAnimation:YES isShake:NO autoHide:YES];
+                }
             });
         });
+        twitterWorkStatus = TwitterWorkStatusDone;
     } errorBlock:^(NSError *error) {
         NSLog(@"Error : %@",error);
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf hideStatus];
+            [self showStatusWithText:@"No Tweets found" withAnimation:YES isShake:YES autoHide:NO];
+            [weakSelf.tableView reloadData];
         });
+        twitterWorkStatus = TwitterWorkStatusDoneWithError;
     }];
 }
 
@@ -405,6 +424,7 @@ typedef enum : NSUInteger{
     f.numberStyle = NSNumberFormatterDecimalStyle;
     NSNumber *include_entities = [f numberFromString:[queryStrings objectForKey:@"include_entities"]];
     [self showStatusWithText:@"Loading more" withAnimation:NO isShake:NO autoHide:NO];
+    twitterWorkStatus = TwitterWorkStatusRequesting;
     [self.twitter getSearchTweetsWithQuery:searchQuery geocode:nil lang:nil locale:nil resultType:nil count:count until:nil sinceID:nil maxID:max_id includeEntities:include_entities  callback:nil successBlock:^(NSDictionary *searchMetadata, NSArray *statuses) {
         [weakSelf.responseStatuses addObjectsFromArray:statuses];
         [statuses enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -413,14 +433,23 @@ typedef enum : NSUInteger{
         }];
         weakSelf.responseSearchMetaData = searchMetadata;
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakSelf.responseStatuses.count == 0 && ((twitterWorkStatus & TwitterWorkStatusDone)|| (twitterWorkStatus &TwitterWorkStatusDoneWithError))) {
+                [self showStatusWithText:@"No Tweets found" withAnimation:YES isShake:YES autoHide:NO];
+            }
+            else{
+                [self showStatusWithText:@"Done" withAnimation:YES isShake:NO autoHide:YES];
+            }
             [weakSelf.tableView reloadData];
-            [weakSelf hideStatus];
+            
         });
+        twitterWorkStatus = TwitterWorkStatusDone;
     } errorBlock:^(NSError *error) {
         NSLog(@"Error : %@",error);
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf hideStatus];
+            [weakSelf.tableView reloadData];
+            [self showStatusWithText:@"No Tweets found" withAnimation:YES isShake:YES autoHide:NO];
         });
+        twitterWorkStatus = TwitterWorkStatusDoneWithError;
     }];
 }
 

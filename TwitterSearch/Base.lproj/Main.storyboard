@@ -102,9 +102,11 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="7oL-Am-m9v" secondAttribute="bottom" constant="-7" id="E0T-ns-vxc"/>
                                     <constraint firstItem="7oL-Am-m9v" firstAttribute="centerY" secondItem="L2L-cg-52z" secondAttribute="centerY" id="Qmp-cX-X25"/>
                                     <constraint firstAttribute="height" id="Xdc-Oi-Wln"/>
                                     <constraint firstItem="7oL-Am-m9v" firstAttribute="centerX" secondItem="L2L-cg-52z" secondAttribute="centerX" id="a6E-xX-I9N"/>
+                                    <constraint firstItem="7oL-Am-m9v" firstAttribute="top" secondItem="L2L-cg-52z" secondAttribute="top" constant="-6.5" id="qNs-GY-jKT"/>
                                 </constraints>
                             </view>
                         </subviews>
