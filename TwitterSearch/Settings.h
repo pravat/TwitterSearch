@@ -1,15 +1,12 @@
 //
-//  ViewController.h
+//  Settings.h
 //  TwitterSearch
 //
 //  Created by Pravat Maskey on 3/28/16.
 //  Copyright © 2016 Pravat Maskey. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#ifndef Settings_h
+#define Settings_h
 
-@interface ViewController : UIViewController
-
-
-@end
-
+#endif /* Settings_h */
