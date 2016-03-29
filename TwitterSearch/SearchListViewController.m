@@ -40,7 +40,7 @@ typedef enum : NSUInteger{
     [self setupTwitterSettings];
     self.responseStatuses = [NSMutableArray array];
     //self.lblInfo.text = @"Please login";
-    [self showStatusWithText:@"Please login" withAnimation:YES autoHide:NO];
+    [self showStatusWithText:@"Please login" withAnimation:YES isShake:NO autoHide:NO];
     // Do any additional setup after loading the view.
 }
 
@@ -300,18 +300,36 @@ typedef enum : NSUInteger{
 
 #pragma mark - ShowStatus
 
-- (void) showStatusWithText:(NSString *)text withAnimation:(BOOL)withAnimation autoHide:(BOOL)autohide{
+- (void) showStatusWithText:(NSString *)text withAnimation:(BOOL)withAnimation isShake:(BOOL) isShake autoHide:(BOOL)autohide{
     self.lblInfo.text = text;
     self.lblInfo.hidden = NO;
+    void (^DoShake) (void) = ^{
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+        [animation setDuration:0.1];
+        [animation setRepeatCount:3];
+        [animation setAutoreverses:YES];
+        [animation setFromValue:[NSValue valueWithCGPoint:
+                                 CGPointMake(self.lblInfo.center.x - 5,self.lblInfo.center.y)]];
+        [animation setToValue:[NSValue valueWithCGPoint:
+                               CGPointMake(self.lblInfo.center.x + 5, self.lblInfo.center.y)]];
+        [self.lblInfo.layer addAnimation:animation forKey:@"position"];
+    };
     if (withAnimation) {
-        [UIView animateWithDuration:0.5
-                         animations:^{
-                             self.constraintStatusHeight.constant = 40;
-                             [self.view layoutIfNeeded];
-                         }];
+        [UIView animateWithDuration:0.5 animations:^{
+            self.constraintStatusHeight.constant = 40;
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            if (isShake) {
+                DoShake();
+            }
+            
+        }];
     }
     else{
         self.constraintStatusHeight.constant = 40;
+        if (isShake) {
+            DoShake();
+        }
     }
     
     if (autohide) {
@@ -320,7 +338,7 @@ typedef enum : NSUInteger{
 }
 
 - (void) showStatusWithText:(NSString *)text{
-    [self showStatusWithText:text withAnimation:YES autoHide:YES];
+    [self showStatusWithText:text withAnimation:YES isShake:NO autoHide:YES];
 }
 - (void) hideStatus{
     [UIView animateWithDuration:0.5 animations:^{
@@ -333,7 +351,12 @@ typedef enum : NSUInteger{
 #pragma mark - TwitterUtilities
 - (void) searchTweetWithText:(NSString *) query{
     //next_results
-    [self showStatusWithText:@"Searching tweets" withAnimation:NO autoHide: NO];
+    if (!self.twitter || !self.twitter.userID) {
+        [self showStatusWithText:@"Please login first." withAnimation:NO isShake:YES autoHide: NO];
+        return;
+    }
+    assert(self.twitter);
+    [self showStatusWithText:@"Searching tweets" withAnimation:NO isShake:NO autoHide: NO];
     __weak typeof(self) weakSelf = self;
     NSString *searchQuery = [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
@@ -386,7 +409,7 @@ typedef enum : NSUInteger{
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
     NSNumber *include_entities = [f numberFromString:[queryStrings objectForKey:@"include_entities"]];
-    [self showStatusWithText:@"Loading more" withAnimation:NO autoHide:NO];
+    [self showStatusWithText:@"Loading more" withAnimation:NO isShake:NO autoHide:NO];
     [self.twitter getSearchTweetsWithQuery:searchQuery geocode:nil lang:nil locale:nil resultType:nil count:count until:nil sinceID:nil maxID:max_id includeEntities:include_entities  callback:nil successBlock:^(NSDictionary *searchMetadata, NSArray *statuses) {
         [weakSelf.responseStatuses addObjectsFromArray:statuses];
         weakSelf.responseSearchMetaData = searchMetadata;
