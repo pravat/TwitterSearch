@@ -10,6 +10,9 @@
 		CD27E0FD1CAA317A001DE2E6 /* LoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CD27E0FC1CAA317A001DE2E6 /* LoadMoreCell.m */; };
 		CD27E1011CAABF66001DE2E6 /* TweetDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD27E1001CAABF66001DE2E6 /* TweetDetailsViewController.m */; };
 		CD27E1041CAAC9C7001DE2E6 /* TweetDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CD27E1031CAAC9C7001DE2E6 /* TweetDetailsCell.m */; };
+		CD27E1071CAAE34A001DE2E6 /* TweetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CD27E1061CAAE34A001DE2E6 /* TweetItem.m */; };
+		CD27E10A1CAAE38D001DE2E6 /* TwitterUser.m in Sources */ = {isa = PBXBuildFile; fileRef = CD27E1091CAAE38D001DE2E6 /* TwitterUser.m */; };
+		CD27E10D1CAAE433001DE2E6 /* TweetMediaImage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD27E10C1CAAE433001DE2E6 /* TweetMediaImage.m */; };
 		CD739C2A1CAA11ED00D2D24A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CD739C291CAA11ED00D2D24A /* main.m */; };
 		CD739C2D1CAA11ED00D2D24A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CD739C2C1CAA11ED00D2D24A /* AppDelegate.m */; };
 		CD739C331CAA11ED00D2D24A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD739C311CAA11ED00D2D24A /* Main.storyboard */; };
@@ -88,6 +91,12 @@
 		CD27E1001CAABF66001DE2E6 /* TweetDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetDetailsViewController.m; sourceTree = "<group>"; };
 		CD27E1021CAAC9C7001DE2E6 /* TweetDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetDetailsCell.h; sourceTree = "<group>"; };
 		CD27E1031CAAC9C7001DE2E6 /* TweetDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetDetailsCell.m; sourceTree = "<group>"; };
+		CD27E1051CAAE34A001DE2E6 /* TweetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetItem.h; sourceTree = "<group>"; };
+		CD27E1061CAAE34A001DE2E6 /* TweetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetItem.m; sourceTree = "<group>"; };
+		CD27E1081CAAE38D001DE2E6 /* TwitterUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterUser.h; sourceTree = "<group>"; };
+		CD27E1091CAAE38D001DE2E6 /* TwitterUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterUser.m; sourceTree = "<group>"; };
+		CD27E10B1CAAE433001DE2E6 /* TweetMediaImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetMediaImage.h; sourceTree = "<group>"; };
+		CD27E10C1CAAE433001DE2E6 /* TweetMediaImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetMediaImage.m; sourceTree = "<group>"; };
 		CD739C251CAA11ED00D2D24A /* TwitterSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD739C291CAA11ED00D2D24A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CD739C2B1CAA11ED00D2D24A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -162,6 +171,12 @@
 		CD27E0FE1CAABE72001DE2E6 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				CD27E1051CAAE34A001DE2E6 /* TweetItem.h */,
+				CD27E1061CAAE34A001DE2E6 /* TweetItem.m */,
+				CD27E1081CAAE38D001DE2E6 /* TwitterUser.h */,
+				CD27E1091CAAE38D001DE2E6 /* TwitterUser.m */,
+				CD27E10B1CAAE433001DE2E6 /* TweetMediaImage.h */,
+				CD27E10C1CAAE433001DE2E6 /* TweetMediaImage.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -410,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD27E10D1CAAE433001DE2E6 /* TweetMediaImage.m in Sources */,
 				CD739C751CAA19B800D2D24A /* SearchListViewController.m in Sources */,
 				CD739C681CAA192F00D2D24A /* STTwitterOS.m in Sources */,
 				CD739C621CAA192F00D2D24A /* NSString+STTwitter.m in Sources */,
@@ -420,12 +436,14 @@
 				CD739C601CAA192F00D2D24A /* NSDateFormatter+STTwitter.m in Sources */,
 				CD739C6B1CAA192F00D2D24A /* BAVPlistNode.m in Sources */,
 				CD739C641CAA192F00D2D24A /* STTwitterAPI.m in Sources */,
+				CD27E10A1CAAE38D001DE2E6 /* TwitterUser.m in Sources */,
 				CD27E1041CAAC9C7001DE2E6 /* TweetDetailsCell.m in Sources */,
 				CD739C711CAA199300D2D24A /* TweetCell.m in Sources */,
 				CD739C631CAA192F00D2D24A /* STHTTPRequest+STTwitter.m in Sources */,
 				CD27E0FD1CAA317A001DE2E6 /* LoadMoreCell.m in Sources */,
 				CD27E1011CAABF66001DE2E6 /* TweetDetailsViewController.m in Sources */,
 				CD739C6C1CAA192F00D2D24A /* JSONSyntaxHighlight.m in Sources */,
+				CD27E1071CAAE34A001DE2E6 /* TweetItem.m in Sources */,
 				CD739C661CAA192F00D2D24A /* STTwitterHTML.m in Sources */,
 				CD739C6A1CAA192F00D2D24A /* STTwitterStreamParser.m in Sources */,
 				CD739C651CAA192F00D2D24A /* STTwitterAppOnly.m in Sources */,

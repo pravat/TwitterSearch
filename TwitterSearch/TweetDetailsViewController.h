@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TweetItem.h"
 @interface TweetDetailsViewController : UITableViewController
 
 
-@property (nonatomic, strong) NSDictionary *tweetItem;
+@property (nonatomic, strong) TweetItem *tweetItem;
 @end

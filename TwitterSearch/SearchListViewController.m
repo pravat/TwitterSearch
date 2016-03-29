@@ -12,6 +12,7 @@
 #import "TweetCell.h"
 #import "LoadMoreCell.h"
 #import "TweetDetailsViewController.h"
+#import "TweetItem.h"
 //#import <SDWebImage/UIImageView+WebCache.h>
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 typedef void (^accountChooserBlock_t)(ACAccount *account, NSString *errorMessage);
@@ -242,30 +243,20 @@ typedef enum : NSUInteger{
         static NSString * CellIndentifierTweets = @"TweetCell";
         TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIndentifierTweets forIndexPath:indexPath];
         NSDictionary *tweetItem = [self.responseStatuses objectAtIndex:index];
-        NSDictionary *tweetEntities = [tweetItem objectForKey:@"entities"];
-        NSArray *media = [tweetEntities objectForKey:@"media"];
-        cell.lblTweet.text = [tweetItem objectForKey:@"text"];
-        if (media != nil) {
-            NSDictionary *mediaItem = [media objectAtIndex:0];
-            if (mediaItem != nil) {
-                NSString *media_url_https = [mediaItem objectForKey:@"media_url_https"];
-                if (media_url_https != nil) {
-                    NSString *media_url_https_thumb = [NSString stringWithFormat:@"%@:thumb", media_url_https];
-                    
-                    [cell.imgTweet sd_setImageWithURL:[NSURL URLWithString:media_url_https_thumb] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                        
-                    }];
-                    //we can create single instance for placeholder image by
-                    //dispatch_once(<#dispatch_once_t *predicate#>, <#^(void)block#>)
-                    
-                }
+        TweetItem *item = [self.responseStatuses objectAtIndex:index];
+        cell.lblTweet.text = item.Text;
+    
+        if (item.hasImage) {
+            [cell.imgTweet sd_setImageWithURL:[NSURL URLWithString:item.TweetImage.ThumbImageURL] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 
-            }
-            
+            }];
+            //we can create single instance for placeholder image by
+            //dispatch_once(<#dispatch_once_t *predicate#>, <#^(void)block#>)
         }
         else{
             cell.constraintImageWidth.constant = 0.0f;
         }
+        
         
         return cell;
     }
@@ -361,8 +352,12 @@ typedef enum : NSUInteger{
     NSString *searchQuery = [query stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     [self.twitter getSearchTweetsWithQuery:searchQuery geocode:nil lang:nil locale:nil resultType:nil count:@"10" until:nil sinceID:nil maxID:nil includeEntities:nil callback:nil successBlock:^(NSDictionary *searchMetadata, NSArray *statuses) {
-        weakSelf.responseStatuses = [NSMutableArray arrayWithArray:statuses];
+        weakSelf.responseStatuses = [NSMutableArray array];
         //[weakSelf.responseStatuses addObjectsFromArray:statuses];
+        [statuses enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TweetItem *tweetItem = [TweetItem ItemWithDictionary:obj];
+            [weakSelf.responseStatuses addObject:tweetItem];
+        }];
         weakSelf.responseSearchMetaData = searchMetadata;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
@@ -412,6 +407,10 @@ typedef enum : NSUInteger{
     [self showStatusWithText:@"Loading more" withAnimation:NO isShake:NO autoHide:NO];
     [self.twitter getSearchTweetsWithQuery:searchQuery geocode:nil lang:nil locale:nil resultType:nil count:count until:nil sinceID:nil maxID:max_id includeEntities:include_entities  callback:nil successBlock:^(NSDictionary *searchMetadata, NSArray *statuses) {
         [weakSelf.responseStatuses addObjectsFromArray:statuses];
+        [statuses enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TweetItem *tweetItem = [TweetItem ItemWithDictionary:obj];
+            [weakSelf.responseStatuses addObject:tweetItem];
+        }];
         weakSelf.responseSearchMetaData = searchMetadata;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];

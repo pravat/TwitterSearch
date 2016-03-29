@@ -46,49 +46,33 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TweetDetailsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetDetailsCell" forIndexPath:indexPath];
-    NSDictionary *user = [_tweetItem objectForKey:@"user"];
-    NSString *profile_image_url_https = [user objectForKey:@"profile_image_url_https"];
-    [cell.imgUser sd_setImageWithURL:[NSURL URLWithString:profile_image_url_https] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"]];
     
-    NSString *userName = [user objectForKey:@"name" ];
-    cell.lblUsername.text =userName;
     
-    NSString *screenName = [user objectForKey:@"screen_name"];
-    cell.lblScreenName.text = screenName;
+    cell.lblUsername.text = self.tweetItem.User.Name;
+    cell.lblScreenName.text = self.tweetItem.User.ScreenName;
+    cell.lblTweetText.text = self.tweetItem.Text;
     
-    NSDictionary *tweetEntities = [_tweetItem objectForKey:@"entities"];
-    NSArray *media = [tweetEntities objectForKey:@"media"];
-    cell.lblTweetText.text = [_tweetItem objectForKey:@"text"];
-    if (media != nil) {
-        NSDictionary *mediaItem = [media objectAtIndex:0];
-        if (mediaItem != nil) {
-            NSString *media_url_https = [mediaItem objectForKey:@"media_url_https"];
-            if (media_url_https != nil) {
-                NSString *media_url_https_large = [NSString stringWithFormat:@"%@:large", media_url_https];
-                
-                [cell.imgMainImage sd_setImageWithURL:[NSURL URLWithString:media_url_https_large] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                    
-                }];
-                
-            }
-            
-        }
-        
+    
+    if (self.tweetItem.User.ProfileImageURL) {
+        [cell.imgUser sd_setImageWithURL:[NSURL URLWithString:self.tweetItem.User.ProfileImageURL] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"]];
     }
+    
+    
+    
+    if (self.tweetItem.TweetImage.hasImage) {
+        [cell.imgMainImage sd_setImageWithURL:[NSURL URLWithString:self.tweetItem.TweetImage.LargeImageURL] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+        }];
+        //we can create single instance for placeholder image by
+        //dispatch_once(<#dispatch_once_t *predicate#>, <#^(void)block#>)
+    }
+    
     else{
         //or change design
     }
     
-    NSString *createdDateStr =  [_tweetItem objectForKey:@"created_at"];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"EEE MMM d HH:mm:ss Z y"];
-    NSDate *date = [dateFormatter dateFromString:createdDateStr];
     
-    [dateFormatter setDateFormat:@"d/m/y, HH:MM"];
-    [dateFormatter setTimeZone:[NSTimeZone defaultTimeZone]];
-    
-    NSString *strDate = [dateFormatter stringFromDate:date];
-    cell.lblDateTime.text = strDate;
+    cell.lblDateTime.text = self.tweetItem.CreatedDate;
     
     return cell;
 }
