@@ -263,6 +263,7 @@ didCompleteWithError:(NSError *)error {
         }
         
         NSError *jsonError = nil;
+        NSString *dataStr = [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding];
         id response = [NSJSONSerialization JSONObjectWithData:_data options:NSJSONReadingAllowFragments error:&jsonError];
         
         if(response == nil) {

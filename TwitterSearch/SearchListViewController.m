@@ -254,7 +254,8 @@ typedef enum : NSUInteger{
                     [cell.imgTweet sd_setImageWithURL:[NSURL URLWithString:media_url_https_thumb] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         
                     }];
-                    
+                    //we can create single instance for placeholder image by
+                    //dispatch_once(<#dispatch_once_t *predicate#>, <#^(void)block#>)
                     
                 }
                 
@@ -281,15 +282,18 @@ typedef enum : NSUInteger{
         [self loadMore];
     }
 }
-/*
+
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     if ([segue.identifier isEqualToString:@"SegueTweetDetails"]) {
+         
+     }
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
  }
- */
+
 
 #pragma mark - ShowStatus
 
