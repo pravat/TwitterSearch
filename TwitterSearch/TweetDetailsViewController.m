@@ -64,9 +64,9 @@
         if (mediaItem != nil) {
             NSString *media_url_https = [mediaItem objectForKey:@"media_url_https"];
             if (media_url_https != nil) {
-                NSString *media_url_https_thumb = [NSString stringWithFormat:@"%@:thumb", media_url_https];
+                NSString *media_url_https_large = [NSString stringWithFormat:@"%@:large", media_url_https];
                 
-                [cell.imgMainImage sd_setImageWithURL:[NSURL URLWithString:media_url_https_thumb] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                [cell.imgMainImage sd_setImageWithURL:[NSURL URLWithString:media_url_https_large] placeholderImage:[UIImage imageNamed:@"twitterPlaceholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     
                 }];
                 

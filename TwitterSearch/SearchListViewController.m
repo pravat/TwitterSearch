@@ -11,6 +11,7 @@
 #import "Settings.h"
 #import "TweetCell.h"
 #import "LoadMoreCell.h"
+#import "TweetDetailsViewController.h"
 //#import <SDWebImage/UIImageView+WebCache.h>
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 typedef void (^accountChooserBlock_t)(ACAccount *account, NSString *errorMessage);
@@ -288,7 +289,9 @@ typedef enum : NSUInteger{
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
      if ([segue.identifier isEqualToString:@"SegueTweetDetails"]) {
-         
+         NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+         TweetDetailsViewController *tweetDetailsViewController = segue.destinationViewController;
+         tweetDetailsViewController.tweetItem = [self.responseStatuses objectAtIndex:path.row];
      }
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
