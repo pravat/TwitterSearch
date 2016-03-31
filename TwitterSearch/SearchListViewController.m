@@ -426,7 +426,7 @@ typedef enum : NSUInteger{
     [self showStatusWithText:@"Loading more" withAnimation:NO isShake:NO autoHide:NO];
     twitterWorkStatus = TwitterWorkStatusRequesting;
     [self.twitter getSearchTweetsWithQuery:searchQuery geocode:nil lang:nil locale:nil resultType:nil count:count until:nil sinceID:nil maxID:max_id includeEntities:include_entities  callback:nil successBlock:^(NSDictionary *searchMetadata, NSArray *statuses) {
-        [weakSelf.responseStatuses addObjectsFromArray:statuses];
+        //[weakSelf.responseStatuses addObjectsFromArray:statuses];
         [statuses enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TweetItem *tweetItem = [TweetItem ItemWithDictionary:obj];
             [weakSelf.responseStatuses addObject:tweetItem];
